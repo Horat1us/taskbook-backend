@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+use Horat1us\TaskBook\Commands\AddUserCommand;
+use Horat1us\TaskBook\EntityManagerContainer;
+use Symfony\Component\Console\Application;
+
+require __DIR__ . "/vendor/autoload.php";
+
+
+$entityManager = EntityManagerContainer::get();
+
+$application = new Application();
+
+$application->add(new AddUserCommand($entityManager));
+
+$application->run();

@@ -1,0 +1,24 @@
+checks:
+  php: true
+
+build:
+  project_setup:
+    after:
+      - mysql -u root -e "CREATE DATABASE taskbook CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+      - ./vendor/bin/doctrine orm:schema-tool:create
+  tests:
+    override:
+      -
+        command: ./vendor/bin/codecept run unit --coverage-xml
+        coverage:
+          file: 'tests/_output/coverage.xml'
+          format: 'clover'
+environment:
+  php:
+    version: '7.0'
+    ini:
+      'date.timezone': 'Europe/Kiev'
+  mysql: '5.7'
+  selenium: false
+  redis: false
+  postgresql: false
