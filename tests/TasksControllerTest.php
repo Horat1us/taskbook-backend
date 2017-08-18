@@ -46,4 +46,17 @@ class TasksControllerTest extends ControllerTestCase
         $this->assertArrayHasKey('count', $responseJson);
         $this->assertArrayHasKey('tasks', $responseJson);
     }
+
+    public function testAdding()
+    {
+        $response = new Response();
+        $this->request->initialize([
+            'name' => 'Horat1us',
+            'text' => 'Do nothing',
+        ]);
+        $this->controller->post($response);
+        $this->assertEquals($response->getStatusCode(), 201);
+        $content = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('id', $content);
+    }
 }
