@@ -63,9 +63,6 @@ class TasksController extends Controller
                     'max' => 24,
                 ]),
             ],
-            'completed' => [
-                new Type("bool")
-            ],
             'text' => [
                 new NotBlank(),
             ],
@@ -82,7 +79,6 @@ class TasksController extends Controller
 
         $task = new Task();
         $task->setName($this->request->query->get('name'));
-        $task->setCompleted((bool)$this->request->query->get('completed'));
         $task->setText($this->request->query->get('text'));
 
         $this->entityManager->persist($task);

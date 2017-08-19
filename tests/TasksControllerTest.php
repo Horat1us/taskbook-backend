@@ -59,4 +59,22 @@ class TasksControllerTest extends ControllerTestCase
         $content = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('id', $content);
     }
+
+    public function testAddingError()
+    {
+        $response = new Response();
+        $this->controller->post($response);
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+        $this->assertCount(2, $data);
+    }
+
+    public function testInvalidMethod()
+    {
+        $this->request->setMethod('OPTIONS');
+        $response = $this->controller->dispatch();
+        $this->assertEquals(404, $response->getStatusCode());
+    }
 }
