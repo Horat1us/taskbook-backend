@@ -10,6 +10,7 @@ namespace Horat1us\TaskBook\Tests;
 
 
 use Horat1us\TaskBook\Controllers\TasksController;
+use Horat1us\TaskBook\Entities\Task;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -47,6 +48,45 @@ class TasksControllerTest extends ControllerTestCase
         $this->assertArrayHasKey('tasks', $responseJson);
     }
 
+    public function testView()
+    {
+        $task = new Task();
+        $task->setName($name = "Tester");
+        $task->setText($text = "Some important text");
+
+        $this->entityManager->persist($task);
+        $this->entityManager->flush();
+
+        $this->request->query->set('id', $task->getId());
+        $this->request->setMethod('get');
+        $response = $this->controller->dispatch();
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $data = json_decode($content = $response->getContent(), true);
+        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+
+        $this->assertArrayHasKey('id', $data);
+        $this->assertEquals($data['id'], $task->getId());
+
+        $this->assertArrayHasKey('name', $data);
+        $this->assertEquals($data['name'], $name);
+
+        $this->assertArrayHasKey('text', $data);
+        $this->assertEquals($data['text'], $text);
+
+        $this->assertArrayHasKey('isCompleted', $data);
+    }
+
+    public function testViewInvalidTask()
+    {
+        $this->request->query->set('id', 0);
+        $this->request->setMethod('get');
+        $response = $this->controller->dispatch();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
     public function testAdding()
     {
         $response = new Response();
@@ -77,4 +117,5 @@ class TasksControllerTest extends ControllerTestCase
         $response = $this->controller->dispatch();
         $this->assertEquals(404, $response->getStatusCode());
     }
+
 }
