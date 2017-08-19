@@ -1,4 +1,5 @@
 # TaskBook (backend)
+[![Build Status](https://scrutinizer-ci.com/g/Horat1us/taskbook-backend/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Horat1us/taskbook-backend/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Horat1us/taskbook-backend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Horat1us/taskbook-backend/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Horat1us/taskbook-backend/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Horat1us/taskbook-backend/?branch=master)
 

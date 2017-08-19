@@ -9,16 +9,16 @@ build:
   tests:
     override:
       -
-        command: ./vendor/bin/codecept run unit --coverage-xml
+        command: ./vendor/bin/phpunit --coverage-clover=my-coverage-file
         coverage:
-          file: 'tests/_output/coverage.xml'
-          format: 'clover'
-environment:
-  php:
-    version: '7.0'
-    ini:
-      'date.timezone': 'Europe/Kiev'
-  mysql: '5.7'
-  selenium: false
-  redis: false
-  postgresql: false
+            file: my-coverage-file
+            format: php-clover
+  environment:
+    php:
+      version: '7.0'
+      ini:
+        'date.timezone': 'Europe/Kiev'
+    mysql: '5.7'
+    selenium: false
+    redis: false
+    postgresql: false
