@@ -14,12 +14,13 @@ use Horat1us\TaskBook\Controllers\Controller;
 use Horat1us\TaskBook\EntityManagerContainer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ControllerTestCase
  * @package Horat1us\TaskBook\Tests
  */
-class ControllerTestCase extends TestCase
+abstract class ControllerTestCase extends TestCase
 {
     /**
      * @var Controller
@@ -43,5 +44,15 @@ class ControllerTestCase extends TestCase
     {
         $this->request = new Request();
         $this->entityManager = EntityManagerContainer::get();
+    }
+
+    /**
+     * @param Response $response
+     * @return void
+     */
+    protected function assertForbidden(Response $response)
+    {
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('"Forbidden"', $response->getContent());
     }
 }

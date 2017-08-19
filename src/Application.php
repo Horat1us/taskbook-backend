@@ -34,14 +34,6 @@ class Application
     protected static $user;
 
     /**
-     * @return User|null
-     */
-    public static function user()
-    {
-        return static::$user;
-    }
-
-    /**
      * Application constructor.
      * @param Request $request
      */
@@ -49,6 +41,22 @@ class Application
     {
         $this->setRequest($request);
         $this->entityManager = EntityManagerContainer::get();
+    }
+
+    /**
+     * @return User|null
+     */
+    public static function getUser()
+    {
+        return self::$user;
+    }
+
+    /**
+     * @param User|null $user
+     */
+    public static function setUser(User $user = null)
+    {
+        self::$user = $user;
     }
 
     /**
@@ -108,7 +116,7 @@ class Application
             return;
         }
 
-        static::$user = $token->getUser();
+        static::setUser($token->getUser());
     }
 
     /**

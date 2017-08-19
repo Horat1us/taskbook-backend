@@ -26,7 +26,7 @@ class ApplicationAuthTest extends TestCase
         $request = new Request();
         $application = new Application($request);
         $application->run();
-        $this->assertNull(Application::user());
+        $this->assertNull(Application::getUser());
     }
 
     public function testInvalidHeader()
@@ -35,7 +35,7 @@ class ApplicationAuthTest extends TestCase
         $request->headers->set('Authorization', 'SomeShit');
         $application = new Application($request);
         $application->run();
-        $this->assertNull($application::user());
+        $this->assertNull($application::getUser());
     }
 
     public function testInvalidToken()
@@ -44,7 +44,7 @@ class ApplicationAuthTest extends TestCase
         $request->headers->set('Authorization', 'Bearer InvalidToken');
         $application = new Application($request);
         $application->run();
-        $this->assertNull(Application::user());
+        $this->assertNull(Application::getUser());
     }
 
     public function testValidToken()
@@ -68,7 +68,7 @@ class ApplicationAuthTest extends TestCase
         $request->headers->set('Authorization', 'Bearer ' . $token->getToken());
         $application->run();
 
-        $this->assertInstanceOf(User::class, Application::user());
-        $this->assertEquals($user->getId(), Application::user()->getId());
+        $this->assertInstanceOf(User::class, Application::getUser());
+        $this->assertEquals($user->getId(), Application::getUser()->getId());
     }
 }
