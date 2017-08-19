@@ -29,7 +29,7 @@ class TasksControllerTest extends ControllerTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->controller = new TasksController($this->request, $this->entityManager);
+        $this->controller = new TasksController($this->entityManager, $this->request);
     }
 
     /**

@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Horat1us\TaskBook\Entities\Token;
 
 
 /**
@@ -33,7 +34,7 @@ class User
     protected $id;
 
     /**
-     * @Column(type="string", length=24)
+     * @Column(type="string", length=24, unique=true)
      * @var string
      */
     protected $name;
@@ -43,6 +44,11 @@ class User
      * @var string
      */
     protected $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Token", mappedBy="user")
+     */
+    protected $tokens;
 
     /**
      * @return int

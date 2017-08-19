@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Horat1us\TaskBook\Controllers\AuthorizationController;
 use Horat1us\TaskBook\Controllers\Controller;
 use Horat1us\TaskBook\Controllers\TasksController;
+use Horat1us\TaskBook\Entities\Token;
 use Horat1us\TaskBook\Entities\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ class Application
      */
     public static function user()
     {
-        return static::user();
+        return static::$user;
     }
 
     /**
@@ -82,11 +83,32 @@ class Application
     }
 
     /**
+     * @return EntityManager
+     */
+    public function getEntityManager(): EntityManager
+    {
+        return $this->entityManager;
+    }
+
+    /**
      * @todo: implement parsing header and loading user by access token
      */
     protected function authorize()
     {
+        if (
+            !($header = $this->request->headers->get('Authorization'))
+            || !preg_match('/^Bearer (.+)$/', $header, $matches)
+        ) {
+            return;
+        }
 
+        $tokensRepository = $this->entityManager->getRepository(Token::class);
+        $token = $tokensRepository->findOneBy(['token' => $matches[1]]);
+        if (!$token instanceof Token) {
+            return;
+        }
+
+        static::$user = $token->getUser();
     }
 
     /**
@@ -106,4 +128,5 @@ class Application
 
         return $controller->dispatch();
     }
+
 }
