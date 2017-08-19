@@ -54,15 +54,13 @@ class AuthorizationController extends Controller
 
         $usersRepository = $this->entityManager->getRepository(User::class);
         $user = $usersRepository->findOneBy(['name' => $this->request->query->get('name')]);
-        if (!$user instanceof User) {
-            $response->setStatusCode(400);
-            $response->setContent(json_encode("Invalid name or password"));
-            return;
-        }
 
-        if (!password_verify(
-            $this->request->query->get('password'),
-            $user->getPasswordHash())
+        if (
+            (!$user instanceof User)
+            || !password_verify(
+                $this->request->query->get('password'),
+                $user->getPasswordHash()
+            )
         ) {
             $response->setStatusCode(400);
             $response->setContent(json_encode("Invalid name or password"));
