@@ -6,8 +6,9 @@
  * Time: 11:38 PM
  */
 
-use Horat1us\TaskBook\Router;
+use Horat1us\TaskBook\Application;
 
-$router = new Router([
-    new Ta
-]);
+require __DIR__ . "/../vendor/autoload.php";
+
+$application = new Application();
+$application->run()->send();

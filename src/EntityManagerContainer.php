@@ -8,8 +8,6 @@
 
 namespace Horat1us\TaskBook;
 
-
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\Configuration as DbalConfiguration;
 use Doctrine\DBAL\DriverManager;

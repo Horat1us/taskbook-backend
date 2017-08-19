@@ -9,6 +9,7 @@
 namespace Horat1us\TaskBook;
 
 use Horat1us\TaskBook\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -32,12 +33,13 @@ class Router
     }
 
     /**
+     * @param Request $request
      * @return Controller|null
      */
-    public function match()
+    public function match(Request $request)
     {
         foreach ($this->controllers as $controller) {
-            if ($controller->match()) {
+            if ($controller->setRequest($request)->match()) {
                 return $controller;
             }
         }

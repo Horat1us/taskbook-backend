@@ -40,9 +40,9 @@ abstract class Controller
      * @param Request $request
      * @param EntityManager $entityManager
      */
-    public function __construct(Request $request, EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Request $request = null)
     {
-        $this->request = $request;
+        $this->setRequest($request);
         $this->entityManager = $entityManager;
     }
 
@@ -91,5 +91,15 @@ abstract class Controller
     final public function match(): bool
     {
         return preg_match($this->path, $this->request->getRequestUri()) === 1;
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+        return $this;
     }
 }
