@@ -22,7 +22,7 @@ class Validator
     /**
      * @var array[]
      */
-    public $rules;
+    protected $rules;
 
     /**
      * Validator constructor.
@@ -60,5 +60,21 @@ class Validator
             }
         }
         return $errors;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getRules(): array
+    {
+        return $this->rules;
+    }
+
+    /**
+     * @param array[] $rules
+     */
+    public function setRules(array $rules)
+    {
+        $this->rules = $rules;
     }
 }
