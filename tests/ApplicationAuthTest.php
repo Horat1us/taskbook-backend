@@ -70,5 +70,9 @@ class ApplicationAuthTest extends TestCase
 
         $this->assertInstanceOf(User::class, Application::getUser());
         $this->assertEquals($user->getId(), Application::getUser()->getId());
+
+        $entityManager->remove($token);
+        $entityManager->remove($user);
+        $entityManager->flush();
     }
 }

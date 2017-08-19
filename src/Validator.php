@@ -47,7 +47,7 @@ class Validator
 
             /** @var ConstraintViolation[] $violations */
             $violations = $validator->validate(
-                $this->request->query->get($field),
+                $this->request->get($field),
                 $rules
             );
 

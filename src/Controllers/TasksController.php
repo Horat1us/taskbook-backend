@@ -11,6 +11,7 @@ namespace Horat1us\TaskBook\Controllers;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Horat1us\TaskBook\Application;
 use Horat1us\TaskBook\Entities\Task;
+use Horat1us\TaskBook\Entities\User;
 use Horat1us\TaskBook\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Length;
@@ -96,7 +97,7 @@ class TasksController extends Controller
 
     public function put(Response $response)
     {
-        if (!Application::getUser()) {
+        if (!Application::getUser() instanceof User) {
             $response->setStatusCode(403);
             $response->setContent(json_encode("Forbidden"));
             return;
@@ -112,14 +113,9 @@ class TasksController extends Controller
 
         $rules = [
             'text' => [
+                new NotBlank(),
                 new Length([
                     'max' => 1000,
-                ]),
-            ],
-            'completed' => [
-                new Range([
-                    'min' => 0,
-                    'max' => 1,
                 ]),
             ],
         ];
@@ -129,7 +125,7 @@ class TasksController extends Controller
         }
 
         $task->setText($this->request->get('text'));
-        $task->setCompleted($this->request->get('completed'));
+        $task->setCompleted((bool) $this->request->get('completed'));
 
         $this->entityManager->persist($task);
         $this->entityManager->flush();

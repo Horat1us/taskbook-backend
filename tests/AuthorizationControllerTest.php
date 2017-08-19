@@ -45,6 +45,14 @@ class AuthorizationControllerTest extends ControllerTestCase
         $this->entityManager->flush();
     }
 
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->entityManager->remove($this->user);
+        $this->entityManager->flush();
+    }
+
     public function testNotAuthorizedGet()
     {
         Application::setUser();

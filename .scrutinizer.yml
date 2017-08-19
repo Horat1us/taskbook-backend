@@ -1,6 +1,11 @@
 checks:
   php: true
 
+filter:
+  paths: ['src/*']
+  exclude:
+    - "tests/"
+
 build:
   project_setup:
     after:

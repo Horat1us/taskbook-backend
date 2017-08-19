@@ -9,8 +9,10 @@
 namespace Horat1us\TaskBook\Tests;
 
 
+use Horat1us\TaskBook\Application;
 use Horat1us\TaskBook\Controllers\TasksController;
 use Horat1us\TaskBook\Entities\Task;
+use Horat1us\TaskBook\Entities\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -50,12 +52,7 @@ class TasksControllerTest extends ControllerTestCase
 
     public function testView()
     {
-        $task = new Task();
-        $task->setName($name = "Tester");
-        $task->setText($text = "Some important text");
-
-        $this->entityManager->persist($task);
-        $this->entityManager->flush();
+        $task = $this->createTask();
 
         $this->request->query->set('id', $task->getId());
         $this->request->setMethod('get');
@@ -70,10 +67,10 @@ class TasksControllerTest extends ControllerTestCase
         $this->assertEquals($data['id'], $task->getId());
 
         $this->assertArrayHasKey('name', $data);
-        $this->assertEquals($data['name'], $name);
+        $this->assertEquals($data['name'], $task->getName());
 
         $this->assertArrayHasKey('text', $data);
-        $this->assertEquals($data['text'], $text);
+        $this->assertEquals($data['text'], $task->getText());
 
         $this->assertArrayHasKey('isCompleted', $data);
     }
@@ -118,4 +115,81 @@ class TasksControllerTest extends ControllerTestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
+
+    public function testUnauthorizedModify()
+    {
+        Application::setUser();
+
+        $this->request->setMethod('put');
+        $response = $this->controller->dispatch();
+
+        $this->assertForbidden($response);
+    }
+
+    public function testModifyValidationFailed()
+    {
+        Application::setUser(new User);
+        $task = $this->createTask();
+
+        $this->request->query->set('id', $task->getId());
+        $this->request->request->set('completed', 2);
+
+        $this->request->setMethod('put');
+        $response = $this->controller->dispatch();
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->deleteTask($task);
+    }
+
+    public function testModify()
+    {
+        Application::setUser(new User);
+        $task = $this->createTask();
+
+        $this->request->query->set('id', $task->getId());
+        $this->request->request->set('completed', $newCompleted = true);
+        $this->request->request->set('text', $newText = ($task->getText() . 'postfix'));
+
+        $this->request->setMethod('put');
+        $response = $this->controller->dispatch();
+
+        $this->assertEquals(204, $response->getStatusCode());
+
+        $this->entityManager->refresh($task);
+
+        $this->assertEquals($task->getCompleted(), $newCompleted);
+        $this->assertEquals($task->getText(), $newText);
+        $this->deleteTask($task);
+    }
+
+    public function testModifyInvalidId()
+    {
+        Application::setUser(new User);
+        $this->request->query->set('id', 0);
+
+        $this->request->setMethod('put');
+        $response = $this->controller->dispatch();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    protected function createTask(): Task
+    {
+        $task = new Task();
+
+        $task->setName($name = "Tester");
+        $task->setText($text = "Some important text");
+        $task->setCompleted(false);
+
+        $this->entityManager->persist($task);
+        $this->entityManager->flush();
+
+        return $task;
+    }
+
+    protected function deleteTask(Task $task)
+    {
+        $this->entityManager->remove($task);
+        $this->entityManager->flush();
+    }
 }

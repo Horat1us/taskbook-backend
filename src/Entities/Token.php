@@ -28,8 +28,8 @@ class Token
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Horat1us\TaskBook\Entities\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Horat1us\TaskBook\Entities\User", fetch="EAGER", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      * @var User
      */
     protected $user;
@@ -38,14 +38,6 @@ class Token
      * @ORM\Column(type="string", length=120)
      */
     protected $token;
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     /**
      * @return mixed

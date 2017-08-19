@@ -79,7 +79,7 @@ class User
     /**
      * @return string
      */
-    public function getPasswordHash() :string
+    public function getPasswordHash(): string
     {
         return $this->password;
     }

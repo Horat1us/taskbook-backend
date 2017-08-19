@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class Application
  * @package Horat1us\TaskBook
+ * @todo: maybe singleton request?
  */
 class Application
 {
