@@ -35,7 +35,7 @@ class Token
     protected $user;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=120)
      */
     protected $token;
 
